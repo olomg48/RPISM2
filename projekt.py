@@ -15,10 +15,26 @@ pko['Stopa otwarcie-zamkniecie'] = np.log(pko['Zamkniecie']) - np.log(pko['Otwar
 #stopa zwrotu od zamkniecia do otwarcia
 pko['Stopa zamkniecie-otwarcie'] = np.log(pko['Otwarcie'].shift(1)) - np.log(pko['Zamkniecie'])
 
-#tygodniowa stopa zwrotu
-pko['Tygodniowa stopa zwrotu'] = np.log(pko["Otwarcie"]) - np.log(pko['Otwarcie'].loc[(pko['Data']==pko['Data']-7)])
+# Tutaj przeprowadzane jest mapowanie, które umożliwi dodanie kolumny z zamknięciem sprzed tygodnia
+data_map = {}
+for i in range(len(pko)):
+    current_date = pko.iloc[i]['Data']
+    week_ago = current_date - pd.DateOffset(days=7)
+    # Sprawdzenie, czy data sprzed tygodnia istnieje w danych
+    data_map[current_date] = week_ago if week_ago in pko['Data'].values else pd.NaT
 
-#Przesunięcie spowodowało wartość Nan w pierwszym wierszu - wypełniamy zerem
-pko.fillna(0, inplace=True)
+# Utworzenie nowej kolumny z wartością zamknięcia sprzed tygodnia lub NaN
+pko['Zamkniecie tydzien temu'] = pko['Data'].map(data_map).map(pko.set_index('Data')['Zamkniecie'])
 
-print(pko[['Data', 'Otwarcie','Tygodniowa stopa zwrotu', 'Zamkniecie','Stopa zwrotu', 'Stopa otwarcie-zamkniecie', 'Stopa zamkniecie-otwarcie']].head(30))
+pko['Tygodniowa stopa zwrotu'] = np.log(pko['Zamkniecie']) - np.log(pko['Zamkniecie tydzien temu'])
+
+# Wypełniamy wszystkie NaN zerami // nie wiem w sumie czy wypełniać, czy nie
+#pko.fillna(0, inplace=True)
+
+
+print(pko.head(30))
+
+
+
+
+#print(pko[['Data', 'Otwarcie','Tygodniowa stopa zwrotu', 'Zamkniecie','Stopa zwrotu', 'Stopa otwarcie-zamkniecie', 'Stopa zamkniecie-otwarcie']].head(30))
