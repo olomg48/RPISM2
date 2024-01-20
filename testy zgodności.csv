@@ -1,0 +1,5 @@
+,Spółka (kod),Okres stóp wzrotu,Chi-kwadrat z rozkładem normalnym,Kolmogorova z rozkładem normalnym,Shapiro-Wilka z rozkładem normalnym,Chi-kwadrat z rozkładem t-studenta,Kolmogorova z rozkładem t-studenta
+0,PKO,Dzienne stopy,0.00000,0.05200,0.93263,0.00000,0.00000
+1,PKO,Tygodniowe stopy,1.00000,0.15686,0.95269,1.00000,0.00000
+2,MIL,Dzienne stopy,1.00000,0.07400,0.96193,1.00000,0.00000
+3,MIL,Tygodniowe stopy,1.00000,0.10784,0.96736,1.00000,0.00000
